@@ -1,0 +1,37 @@
+<!Doctype html>
+<html lang=en>
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<title>Classifier</title>
+<style>
+  .btn{
+    padding: 10px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    font-size: 16px;
+    resize: none;
+    display: block;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>
+</head>
+<body>
+  <h1>Spam Classification</h1>
+<!-- <form action = "{{ url_for('predict') }}" method = "post"> -->
+<!-- <p>Enter Message</p> -->
+<textarea>{{text}}</textarea>
+<!-- <p><input type="text" name="nm" /></p> -->
+{% if classes==1 %}
+<button class="btn"> Spam </button>
+{% endif %}
+{% if classes==0 %}
+<button class="btn"> Not Spam </button>
+{% endif %}
+<!-- </form> -->
+
+</body>
+</html>

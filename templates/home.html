@@ -1,0 +1,17 @@
+<!Doctype html>
+<html lang=en>
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<title>Classifier</title>
+<body>
+  <h1>Spam Classification</h1>
+<form action = "{{ url_for('predict') }}" method = "post">
+<!-- <p>Enter Message</p> -->
+<textarea name="nm" placeholder="Write Message"></textarea>
+<!-- <p><input type="text" name="nm" /></p> -->
+<p><input type = "submit" value="Submit" /></p>
+</form>
+
+</body>
+</head>
+</html>
