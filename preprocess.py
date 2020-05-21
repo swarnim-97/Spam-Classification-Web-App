@@ -1,7 +1,11 @@
 import re
+import json
 import numpy as np
 import pandas as pd
 import operator
+from keras.models import load_model
+from keras.models import model_from_json
+from keras.preprocessing.text import Tokenizer
 
 class Preprocess:
 
@@ -45,3 +49,53 @@ class Preprocess:
             text = text.replace(s, specials[s])
 
         return text
+
+
+    @staticmethod
+    def tokenizer_load():
+        def tokenizer_from_json(json_string):
+            """Parses a JSON tokenizer configuration file and returns a
+            tokenizer instance.
+            # Arguments
+                json_string: JSON string encoding a tokenizer configuration.
+            # Returns
+                A Keras Tokenizer instance
+            """
+            tokenizer_config = json.loads(json_string)
+            config = tokenizer_config.get('config')
+
+            word_counts = json.loads(config.pop('word_counts'))
+            word_docs = json.loads(config.pop('word_docs'))
+            index_docs = json.loads(config.pop('index_docs'))
+            # Integer indexing gets converted to strings with json.dumps()
+            index_docs = {int(k): v for k, v in index_docs.items()}
+            index_word = json.loads(config.pop('index_word'))
+            index_word = {int(k): v for k, v in index_word.items()}
+            word_index = json.loads(config.pop('word_index'))
+
+            tokenizer = Tokenizer(**config)
+            tokenizer.word_counts = word_counts
+            tokenizer.word_docs = word_docs
+            tokenizer.index_docs = index_docs
+            tokenizer.word_index = word_index
+            tokenizer.index_word = index_word
+
+            return tokenizer
+        with open('tokenizer.json') as f:
+            data = json.load(f)
+            tokenizer = tokenizer_from_json(data)
+        return tokenizer
+
+    @staticmethod
+    def loadModel():
+        with open('model_in_json.json','r') as f:
+            model_json = json.load(f)
+
+        loaded_model = model_from_json(model_json)
+        loaded_model.load_weights('model.h5')
+        return loaded_model
+
+
+# pre = Preprocess("abc")
+# tokenizer = pre.tokenizer_load()
+# loaded_model = pre.loadModel()
